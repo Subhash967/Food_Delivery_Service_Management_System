@@ -382,7 +382,10 @@ def manager_show_user_page(type):
         if request.cookies.get('user_id')[0] != 'm': return make_response(render_template('main/message.html', message='You do not have access to this page'), 403)
     except:
         return redirect('/select_user')
-    users = database['users'].find({ '_id': { '$regex': f"^{type[0]}-" } })
+    users = [user for user in database['users'].find({ '_id': { '$regex': f"^{type[0]}-" } })]
+    for user in users:
+        ratings = [info['rating'] for info in database['ratings'].find({ 'to': user['_id'] })]
+        user['avg_rating'] = sum(ratings)/len(ratings) if sum(ratings) else 0
     return render_template('management/show_user.html', users=users, type=type.capitalize())
 
 # Route for removing user

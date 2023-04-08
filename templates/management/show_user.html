@@ -58,9 +58,14 @@
     {% for user in users %}
     <div class="row" style="padding-top: 20px; padding-left: 10px;">
         <div class="col text-center">
-            <h5>
-                {{ user.name }}
-            </h5>
+            <div class="row text-center" style="padding-top: 10px;">
+                <h5>
+                    {{ user.name }}
+                </h5>
+            </div>
+            <div class="row text-center" style="padding-top: 10px; padding-left: 50px;">
+                Average Rating: {{ user.avg_rating }}
+            </div> 
         </div>
         <div class="col text-center">
             <div class="row text-center" style="padding-top: 10px;">
