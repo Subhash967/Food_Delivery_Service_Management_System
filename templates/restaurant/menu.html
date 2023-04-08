@@ -18,7 +18,7 @@
             if (!confirm(`Are you sure you want to remove ${item}?`)) return console.log('Welp');
             await axios.post('/restaurant/remove_item', { restaurant, item });
             alert('Item has been successfully removed');
-			location.reload();
+            location.reload();
         }
     </script>
 </head>

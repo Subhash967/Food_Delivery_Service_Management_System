@@ -11,7 +11,7 @@
         async function assign_delivery_guy (order, agent) {
             await axios.post('/manager/assign', { order, agent });
             alert('Delivery agent has been successfully assigned');
-			location.reload();
+            location.reload();
         }
     </script>
 </head>

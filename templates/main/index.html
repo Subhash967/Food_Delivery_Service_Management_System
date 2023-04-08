@@ -45,11 +45,11 @@
                         <a class="nav-link" href="#contacts">Contact Us</a>
                     </li>
                 </ul>
-				{% if not logged_in %}
+                {% if not logged_in %}
                 <button class="btn btn-outline-success" style="margin-right:10px;"><a class="nav-link" href="/select_user">Login / Signup</a></button>
-				{% else %}
-				<button class="btn btn-outline-success" style="margin-right:10px;"><a class="nav-link" href="/logout">Logout</a></button>
-				{% endif %}
+                {% else %}
+                <button class="btn btn-outline-success" style="margin-right:10px;"><a class="nav-link" href="/logout">Logout</a></button>
+                {% endif %}
             </div>
         </div>
     </nav>

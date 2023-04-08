@@ -4,16 +4,15 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Orders</title>
+    <title>DineEase</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
     <script>
-        async function update_order(_id, status) {
-            const est_time = ~~prompt('Estimated time for cooking');
-            await axios.post('/restaurant/update_order', { _id, status, est_time });
-            document.getElementById(`status-${_id}`).innerHTML = status;
-            alert("Order updated.");
-            location.reload();
+        async function rate (from, to) {
+            let rating = ~~prompt('Rate on a scale of 1 to 5');
+            while (![1, 2, 3, 4, 5].find(e => e === rating)) rating = ~~prompt('Invalid input. Rate on a scale of 1 to 5');
+            await axios.post('/rate', { from, to, rating } );
+            alert('Rating has been updated');
         }
     </script>
 </head>
@@ -30,38 +29,23 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/restaurant/orders">Orders</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/restaurant/menu">Menu</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/restaurant/past_orders">Past Orders</a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="#about">About</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#contacts">Contact Us</a>
+                        <a class="nav-link active" aria-current="page" href="/">Home</a>
                     </li>
                 </ul>
-                <button class="btn btn-outline-success" style="margin-right:10px;"><a class="nav-link"
-                        href="/logout">Logout</a></button>
-
+                <button class="btn btn-outline-success" style="margin-right:10px;"><a class="nav-link" href="/logout">Logout</a></button>
+                
             </div>
         </div>
     </nav>
-
     <h1>
-        Orders
+        Past Orders
     </h1>
     <hr>
     {% for order in orders %}
     <div class="row">
         <div class="col">
             <h5>
-                &nbsp;&nbsp;&nbsp;{{ order.customer }}
+                &nbsp;&nbsp;&nbsp;{{ order.restaurant }}
             </h5>
         </div>
         <div class="col">
@@ -74,11 +58,9 @@
         </div>
         <div class="col">
             <div class="row">
-                <button class="btn btn-outline-success">Total Price={{ order.price }}</button>
-
+                <button class="btn btn-outline-success">Total Price= {{ order.price }} </button>
             </div>
             <div class="row my-5">
-                <!-- Date and time -->
             </div>
         </div>
 
@@ -86,17 +68,41 @@
     <div class="row">
         <div class="col">
             <button class="btn btn-outline-success"><span style="color: black;">Order Status-</span><span
-                    style="color: blue;" id="status-{{ order._id }}">{{ order.status }}</span></button>
-
-        </div>
-
-        <div class="col">
-            <button class="btn btn-success"
-                onclick="update_order('{{ order._id }}', 'Delivery agent to be assigned') ">Accept</button>
+                    style="color: green;">{{ order.status }}</span></button>
         </div>
         <div class="col">
-            <button class="btn btn-danger"
-                onclick="update_order('{{ order._id }}', 'Declined by restaurant') ">Decline</button>
+            {% if order.cooking_time %}
+                Cooking time: {{ order.cooking_time }} min
+            {% endif %}
+        </div>
+        <div class="col">
+            {% if order.pickup_time %}
+                Pickup time: {{ order.pickup_time }} min
+            {% endif %}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+        </div>
+        <div class="col">
+        </div>
+        <div class="col">
+            {% if order.delivery_time %}
+                Delivery time: {{ order.delivery_time }} min
+            {% endif %}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col"></div>
+        <div class="col">
+            {% if order.status == 'Delivered' %}
+            <button class="btn btn-warning" onclick="rate('{{ self_user }}', '{{ order.restaurant_id }}')">Rate Restaurant</button>
+            {% endif %}
+        </div>
+        <div class="col">
+            {% if order.status == 'Delivered' %}
+            <button class="btn btn-warning" onclick="rate('{{ self_user }}', '{{ order.delivery_agent }}')">Rate Delivery Agent</button>
+            {% endif %}
         </div>
     </div>
     <br>
@@ -107,6 +113,7 @@
         integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N"
         crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
 </body>
 
 </html>
