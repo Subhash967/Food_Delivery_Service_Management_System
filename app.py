@@ -485,3 +485,18 @@ def delivery_update_order():
     except Exception as exception:
         print('Error in updating data:\n', exception)
         return make_response('Server issue', 500)
+
+# Route for delivery guy to rate customers
+@app.route('/delivery/past_orders')
+def delivery_guy_past_orders():
+    try:
+        if request.cookies.get('user_id')[0] != 'd': return make_response(render_template('main/message.html', message='You do not have access to this page'), 403)
+    except:
+        return redirect('/select_user')
+    orders = [order for order in database['orders'].find({ 'delivery_agent': request.cookies.get('user_id'), 'status': 'Delivered' })]
+    for order in orders:
+        user = database['users'].find_one({ '_id': order['user'] })
+        order['customer'] = user['name']
+        order['address'] = user['address']
+        order['phone'] = user['phone']
+    return render_template('delivery/past_orders.html', orders=orders, self_user=request.cookies.get('user_id'))
