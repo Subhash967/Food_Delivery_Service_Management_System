@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
+    <title>DineEase-Menu</title>
+    <script>
+        function add_to_cart (item) {
+            try {
+                const cart = JSON.parse(window.localStorage.getItem('cart'));
+                try {
+                    cart[item.name].qty += 1;
+                }
+                catch (err) {
+                    cart[item.name] = { qty: 1, price: item.price, restaurant: item.restaurant }
+                }
+                finally {
+                    window.localStorage.setItem('cart', JSON.stringify(cart));
+                }
+            } catch (err) {
+                const new_cart = {};
+                new_cart[item.name] = { qty: 1, price: item.price, restaurant: item.restaurant };
+                window.localStorage.setItem('cart', JSON.stringify(new_cart));
+            }
+            finally {
+                console.log(window.localStorage.getItem('cart'));
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">DineEase</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/">Home</a>
+                    </li>
+					<li class="nav-item">
+						<a class="nav-link" href="/cart">Cart</a>
+					</li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/past_orders">Past Orders</a>
+                    </li>
+                </ul>
+                <button class="btn btn-outline-success" style="margin-right:10px;"><a class="nav-link" href="/logout">Logout</a></button>
+                
+            </div>
+        </div>
+    </nav>
+
+    <!-- <h1>
+        Novotel
+    </h1>
+    <div>
+        <div class="d-flex flex-wrap justify-content-center mb-3">
+            <div class="card" style="width: 18rem; margin: 10px;">
+                <img src="{{ url_for('static', filename='images/imgtc.jpg') }}" class="card-img-top" alt="..."
+                    width="300" height="200">
+                <div class="card-body">
+                    <h5 class="card-title">Tandoori Chicken</h5>
+                    <p class="card-text">Tandoori chicken is a crazy good and smoky chicken appetizer that you are sure
+                        to love,
+                        truly! Traditionally, prepared by roasting or grilling the marinated chicken in a clay oven
+                        called tandoor
+                    </p>
+                    <div class="container text-center">
+                        <div class="row">
+                            <div class="col-5">
+                                <p>Price-₹175</p>
+                            </div>
+                            <div class="col-7">
+                                <button type="button" class="btn btn-primary">Add to cart</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="card" style="width: 18rem;margin: 10px;">
+                <img src="{{ url_for('static', filename='images/imgsb.jpg') }}" class="card-img-top" alt="..."
+                    width="300" height="200">
+                <div class="card-body">
+                    <h5 class="card-title">Sizzling Brownie</h5>
+                    <p class="card-text">Sizzling brownie is a dessert available in India, made popular by cafes and
+                        restaurants of Mumbai and Kerala. It is a chocolate brownie with a scoop of ice cream on top
+                        served with a generous pouring of melted chocolate on the ice-cream. It is served on hot sizzler
+                        plates to be eaten directly in its sizzling hot form.</p>
+                    <div class="container text-center">
+                        <div class="row">
+                            <div class="col-5">
+                                <p>Price-₹200</p>
+                            </div>
+                            <div class="col-7">
+                                <button type="button" class="btn btn-primary">Add to cart</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="width: 18rem;margin: 10px;">
+                <img src="{{ url_for('static', filename='images/imgpt.jpg') }}" class="card-img-top" alt="..."
+                    width="300" height="200">
+                <div class="card-body">
+                    <h5 class="card-title">Panner tikka</h5>
+                    <p class="card-text">Paneer Tikka is a popular and delicious tandoori snack where Paneer (Indian
+                        cottage cheese cubes) are marinated in a spiced yogurt-based marinade, arranged on skewers and
+                        grilled in the oven.</p>
+                    <div class="container text-center">
+                        <div class="row">
+                            <div class="col-5">
+                                <p>Price-₹150</p>
+                            </div>
+                            <div class="col-7">
+                                <button type="button" class="btn btn-primary">Add to cart</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="width: 18rem;margin: 10px;">
+                <img src="{{ url_for('static', filename='images/imgcb.jpg') }}" class="card-img-top" alt="..."
+                    width="300" height="200">
+                <div class="card-body">
+                    <h5 class="card-title">Chicken Biryani</h5>
+                    <p class="card-text">This chicken Biryani is an authentic Indian vegetarian recipe packed full of
+                        your favorite rice, chicken, and spices.</p>
+                    <div class="container text-center">
+                        <div class="row">
+                            <div class="col-5">
+                                <p>Price-₹275</p>
+                            </div>
+                            <div class="col-7">
+                                <button type="button" class="btn btn-primary">Add to cart</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="width: 18rem;margin: 10px; ">
+                <img src="{{ url_for('static', filename='images/imgvb.jpg') }}" class="card-img-top" alt="..."
+                    width="300" height="200">
+                <div class="card-body">
+                    <h5 class="card-title">Veg Biryani</h5>
+                    <p class="card-text">This Veg Biryani is an authentic Indian vegetarian recipe packed full of your
+                        favorite rice, veggies, and spices.</p>
+                    <div class="container text-center">
+                        <div class="row">
+                            <div class="col-5">
+                                <p>Price-₹225</p>
+                            </div>
+                            <div class="col-7">
+                                <button type="button" class="btn btn-primary">Add to cart</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="width: 18rem;margin: 10px;">
+                <img src="{{ url_for('static', filename='images/imgp.jpg') }}" class="card-img-top" alt="..."
+                    width="300" height="200">
+                <div class="card-body">
+                    <h5 class="card-title">Pizza</h5>
+                    <p class="card-text">Pizza is a dish of Italian origin consisting of a usually round, flat base of
+                        leavened wheat-based dough topped with tomatoes, cheese, and often various other ingredients,
+                        which is then baked at a high temperature, traditionally in a wood-fired oven.</p>
+                    <div class="container text-center">
+                        <div class="row">
+                            <div class="col-5">
+                                <p>Price-₹300</p>
+                            </div>
+                            <div class="col-7">
+                                <button type="button" class="btn btn-primary">Add to cart</button>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div> -->
+
+    {% for restaurant, items in menu_items %}
+        <h1>{{ restaurant }}</h1>
+        <div>
+            <div class="d-flex flex-wrap justify-content-center mb-3 flex-row">
+            {% for item in items %}
+                <div class="card" style="width: 18rem; margin: 10px;">
+                    <img src="{{ url_for('static', filename=item.image) }}" class="card-img-top" alt="..."
+                        width="300" height="200">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ item.name }}</h5>
+                        <p class="card-text">{{ item.description }}
+                        </p>
+                        <div class="container text-center">
+                            <div class="row">
+                                <div class="col-5">
+                                    <p>Price-₹{{ item.price }}</p>
+                                </div>
+                                <div class="col-7">
+                                    <button type="button" class="btn btn-primary" onclick="add_to_cart({ name: '{{ item.name }}', price: {{ item.price }}, restaurant: '{{ item.restaurant }}' })">Add to cart</button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+            </div>
+        </div>
+    {% endfor %}
+</body>
+
+</html>

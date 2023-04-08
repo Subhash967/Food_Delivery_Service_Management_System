@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>DineEase</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
+    <script>
+        async function assign_delivery_guy (order, agent) {
+            await axios.post('/manager/assign', { order, agent });
+            alert('Delivery agent has been successfully assigned');
+			location.reload();
+        }
+    </script>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">DineEase</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="index.html">Home</a>
+                    </li>
+
+                </ul>
+                <button class="btn btn-outline-success" style="margin-right:10px;"><a class="nav-link" href="#about">Log
+                        Out</a></button>
+            </div>
+        </div>
+    </nav>
+    <h1>Assign Delivery Agent</h1>
+    {% for guy in delivery_guys %}
+    <hr style="padding-top: 20px;">
+    <div style=" padding-top: 30px; padding-left: 30px;">
+        <div class="row">
+            <div class="col text-center">
+                {{ guy.name }}
+            </div>
+            <div class="col text-center">
+                <div class="row">
+                    {{ guy.phone }}
+                </div>
+            </div>
+            <div class="col text-center">
+                <button class="btn btn-success" onclick="assign_delivery_guy('{{ order_id }}', '{{ guy._id }}')">Assign</button>
+            </div>
+        </div>
+
+    </div>
+    {% endfor %}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</body>
+
+</html>
