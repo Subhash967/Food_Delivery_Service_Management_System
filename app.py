@@ -64,7 +64,7 @@ def display_cart():
 # Route for placing order
 @app.route('/place_order', methods=['POST'])
 def place_order():
-    # Fetch roder details from the page
+    # Fetch order details from the page
     items = eval(request.data.decode())['items'].items()
     orders = {}
     for item in items:
@@ -115,7 +115,7 @@ def customer_signup():
     # Save in database
     database['users'].insert_one(user)
     # Send response to customer
-    response = redirect('/menu')
+    response = redirect('/')
     response.set_cookie('user_id', user['_id'])
     return response
 
@@ -134,7 +134,7 @@ def customer_login_page():
 def customer_login():
     user = database['users'].find_one({ 'email': request.form.get('email'), 'password': request.form.get('password') })
     if user:
-        response = redirect('/menu')
+        response = redirect('/')
         response.set_cookie('user_id', user['_id'])
         return response
     else:
@@ -242,7 +242,7 @@ def restaurant_update_order():
         return make_response(render_template('main/message.html', message='You do not have access to this page'), 403)
     # Fetch data from request
     data = eval(request.data.decode())
-    # data = { '_id', 'status' }
+    # data = { '_id', 'status', 'est_time' }
     try:
         database['orders'].update_one({ '_id': data['_id'] }, { '$set': { 'status': data['status'], 'cooking_time': data['est_time'] } })
         # print(data['_id'], database['orders'].find_one({ '_id': data['_id'] }))
@@ -261,7 +261,7 @@ def restaurant_past_orders():
     restaurant = database['users'].find_one(request.cookies.get('user_id'))
     orders = [order for order in database['orders'].find({ 'restaurant': restaurant['name'] })]
     for order in orders:
-        if order['status'] == 'Waiting for customer': orders.remove[order]
+        if order['status'] == 'Waiting for restaurant': orders.remove[order]
         order['customer'] = database['users'].find_one({ '_id': order['user'] })['name']
         # print(order)
     return render_template('restaurant/past_orders.html', orders=orders)
